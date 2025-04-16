@@ -1,4 +1,4 @@
-name: Hello World Workflow
+name: Actions bootcamp
 
 on: workflow_dispatch
 
@@ -8,10 +8,22 @@ jobs:
     steps:
       - name: Say Hello
         run: |
-          echo "Hello, World!"
+          echo "Hello, World!" > hello.txt
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: output
+          path: hello.txt
   bye:
     needs: hello
     runs-on: ubuntu-latest
     steps:
+      - name: Get artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: output
+      - name: Read artifact
+        run: cat hello.txt
+
       - name: Say Goodbye
         run: echo "Goodbye"
