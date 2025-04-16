@@ -10,6 +10,7 @@ jobs:
         run: |
           echo "Hello, World!"
   bye:
+    needs: hello
     runs-on: ubuntu-latest
     steps:
       - name: Say Goodbye
