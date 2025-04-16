@@ -12,4 +12,4 @@ jobs:
     steps:
       - name: Incoming event from a webhook
         run: |
-          echo "event name: $GITHUB_EVENT_NAME"
+          echo "event name: ${{ github.event.client_payload.deployment_target }}"
