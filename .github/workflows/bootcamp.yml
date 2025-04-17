@@ -1,4 +1,4 @@
-name: Actions bootcamp
+name: Flow Festival cms to s3 upload workflow
 
 on:
   repository_dispatch:
@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: scaffold s3 updates in staging
         run: echo 'scaffold s3 updates in staging'
-  prod:
+  s3_tasks_in_prod:
     needs: s3_webhook
     runs-on: ubuntu-latest
     if: needs.s3_webhook.outputs.deployment_target == 'prod'
