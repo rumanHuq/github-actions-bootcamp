@@ -1,15 +1,31 @@
 name: Actions bootcamp
 
 on:
-  workflow_dispatch:
   repository_dispatch:
     types:
       - webhook
 
 jobs:
-  hello:
+  s3_webhook:
     runs-on: ubuntu-latest
+    outputs:
+      deployment_target: ${{steps.s3_webhook_payload.outputs.deployment_target}}
     steps:
       - name: Incoming event from a webhook
+        id: s3_webhook_payload
         run: |
-          echo "event name: ${{ github.event.client_payload.deployment_target }}"
+          echo "deployment_target=${{ github.event.client_payload.deployment_target }}" >> $GITHUB_OUTPUT
+  s3_tasks_in_staging:
+    needs: s3_webhook
+    runs-on: ubuntu-latest
+    if: needs.s3_webhook.outputs.deployment_target == 'staging'
+    steps:
+      - name: scaffold s3 updates in staging
+        run: echo 'scaffold s3 updates in staging'
+  prod:
+    needs: s3_webhook
+    runs-on: ubuntu-latest
+    if: needs.s3_webhook.outputs.deployment_target == 'prod'
+    steps:
+      - name: scaffold s3 updates in staging
+        run: echo 'scaffold s3 updates in prod'
